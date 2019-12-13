@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 
 app.post('/books', (req, res) => {
+    console.log(req.body)
     const book = new Book(req.body)
 
     book.save().then(() => {
@@ -28,7 +29,17 @@ app.get('/books', (req, res) => {
 })
 
 app.get('/books/:id', (req, res) => {
-    console.log(req.params)
+    const _id = req.params.id
+    
+    Book.findById(_id).then((book) => {
+        if (!book) {
+            return res.status(404).send()
+        }
+
+        res.send(book)
+    }).catch((e) => {
+        res.status(500).send()
+    })
 })
 
 app.listen(port, () => {
