@@ -13,10 +13,22 @@ app.post('/books', (req, res) => {
     const book = new Book(req.body)
 
     book.save().then(() => {
-        res.send(book)
+        res.status(201).send(book)
     }).catch((e) => {
         res.status(400).send(e)
     })
+})
+
+app.get('/books', (req, res) => {
+    Book.find({}).then((books) => {
+        res.send(books)
+    }).catch((e) => {
+        res.status(500).send()
+    })
+})
+
+app.get('/books/:id', (req, res) => {
+    console.log(req.params)
 })
 
 app.listen(port, () => {
